@@ -16,7 +16,6 @@ Finally, install the environment and the pre-commit hooks with
 ```bash
 make install
 ```
-
 {% if cookiecutter.dockerfile == "y" -%}
 
 ## Docker
@@ -32,7 +31,6 @@ To run the docker container, run:
 ```bash
 make run-container
 ```
-
 {%- endif %}
 
 ---

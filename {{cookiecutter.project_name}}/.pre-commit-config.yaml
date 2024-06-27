@@ -1,29 +1,30 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: "v4.4.0"
+    rev: "v4.6.0"
     hooks:
       - id: check-case-conflict
       - id: check-merge-conflict
       - id: check-toml
       - id: check-yaml
       - id: end-of-file-fixer
+        exclude: requirements.txt
       - id: trailing-whitespace
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: "v0.1.8"
+    rev: "v0.4.10"
     hooks:
       - id: ruff
       - id: ruff-format
   - repo: https://github.com/jendrikseipp/vulture
-    rev: "v2.3"
+    rev: "v2.11"
     hooks:
       - id: vulture
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: "v3.0.3"
+    rev: "v4.0.0-alpha.8"
     hooks:
       - id: prettier
   - repo: https://github.com/fpgmaas/deptry.git
-    rev: "0.12.0"
+    rev: "0.16.1"
     hooks:
       - id: deptry
         name: deptry
@@ -31,7 +32,13 @@ repos:
         language: system
         pass_filenames: false
   - repo: https://github.com/python-poetry/poetry
-    rev: "1.7.1"
+    rev: "1.8.0"
+    hooks:
+      - id: poetry-check
+      - id: poetry-lock
+        args: ["--no-update"]
+      - id: poetry-export
+      - id: poetry-install
 {% if cookiecutter.mypy == 'y' -%}
   - repo: local
     hooks:
@@ -43,9 +50,3 @@ repos:
         args: ["--config-file", "pyproject.toml"]
         pass_filenames: false
 {% endif %}
-    hooks:
-      - id: poetry-check
-      - id: poetry-lock
-        args: ["--no-update"]
-      - id: poetry-export
-      - id: poetry-install
