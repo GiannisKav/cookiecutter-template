@@ -39,7 +39,7 @@ repos:
         args: ["--no-update"]
       - id: poetry-export
       - id: poetry-install
-{% if cookiecutter.mypy == 'y' -%}
+  {% if cookiecutter.mypy == 'y' -%}
   - repo: local
     hooks:
       - id: mypy
@@ -49,4 +49,4 @@ repos:
         types: [python]
         args: ["--config-file", "pyproject.toml"]
         pass_filenames: false
-{% endif %}
+  {% endif %}
