@@ -19,7 +19,7 @@ On your local machine, install cookiecutter, navigate to the directory in which 
 create a project directory, and run the following command:
 
 ```bash
-cookiecutter git@github.com:GiannisKav/cookiecutter-template.git
+cookiecutter https://github.com/GiannisKav/cookiecutter-template.git
 ```
 
 Then run the following commands, replacing `<project-name>`, with the name that you gave the repository:
