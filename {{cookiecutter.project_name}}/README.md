@@ -16,8 +16,8 @@ Finally, install the environment and the pre-commit hooks with
 ```bash
 make install
 ```
-{% if cookiecutter.dockerfile == "y" -%}
 
+{% if cookiecutter.dockerfile == "y" -%}
 ## Docker
 
 To build the docker image, run:

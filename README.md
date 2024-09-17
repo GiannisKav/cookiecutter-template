@@ -2,7 +2,7 @@
 
 This is a Cookiecutter template that can be used to initiate a Python project with a basic structure and some useful tools. It includes:
 
-- [Poetry](https://python-poetry.org/) for dependency management
+- [uv](https://docs.astral.sh/uv/) for dependency management
 - Pre-commit hooks with [pre-commit](https://pre-commit.com/)
 - Code quality with:
   - [ruff](https://github.com/charliermarsh/ruff)
@@ -19,18 +19,16 @@ On your local machine, install cookiecutter, navigate to the directory in which 
 create a project directory, and run the following command:
 
 ```bash
-cookiecutter https://github.com/GiannisKav/cookiecutter-template.git
+uvx cookiecutter https://github.com/GiannisKav/cookiecutter-template.git
 ```
 
-Then run the following commands, replacing `<project-name>`, with the name that you gave the repository:
+or if you don't have `uv` installed yet:
 
 ```bash
-cd <project_name>
-git init -b main
-git add .
-git commit -m "Init commit"
-git remote add origin git@github.com:GiannisKav/<project_name>.git
-git push -u origin main
+curl -LsSf https://astral.sh/uv/install.sh | sh
+source $HOME/.cargo/env
+uv tool install cookiecutter
+uvx cookiecutter https://github.com/GiannisKav/cookiecutter-template.git
 ```
 
 Finally, install the environment and the pre-commit hooks with

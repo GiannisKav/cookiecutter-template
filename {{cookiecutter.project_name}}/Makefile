@@ -1,11 +1,10 @@
 .PHONY: install
-install: ## Install the poetry environment and install the pre-commit hooks
-	@echo "🚀 Creating virtual environment using pyenv and poetry"
-	@poetry lock --no-update
-	@poetry export -f requirements.txt --output requirements.txt
-	@poetry install --sync
-	@poetry run pre-commit install
-	@poetry shell
+install: ## Install the virtual environment and install the pre-commit hooks
+	@echo "🚀 Installing python 3.11"
+	@uv python install 3.11
+	@echo "🚀 Creating virtual environment using uv"
+	@uv sync
+	@uv run pre-commit install
 {%- if cookiecutter.dockerfile == "y"%}
 
 .PHONY: build-image
@@ -22,16 +21,12 @@ run-container: ## Run the docker container
 .PHONY: check
 check: ## Run code quality tools.
 	@echo "🚀 Checking code quality: Running pre-commit"
-	@poetry run pre-commit run -a
+	@uv run pre-commit run -a
 
 .PHONY: test
 test: ## Test the code with pytest
 	@echo "🚀 Testing code: Running pytest"
-{%- if cookiecutter.codecov == "y"%}
-	@poetry run pytest --cov={{cookiecutter.project_slug}} --cov-config=pyproject.toml --cov-report=html
-{%- else %}
-	@poetry run pytest --doctest-modules
-{%- endif %}
+	@uv run pytest
 
 .PHONY: help
 help:

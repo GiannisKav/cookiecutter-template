@@ -1,26 +1,21 @@
-# syntax=docker/dockerfile:1
+# Install uv
+FROM python:3.12-slim
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
-FROM python:3.11-slim-buster
+# Change the working directory to the `app` directory
+WORKDIR /app
 
-ENV POETRY_VERSION=1.7.1 \
-    POETRY_VIRTUALENVS_CREATE=false
+# Copy the lockfile and `pyproject.toml` into the image
+ADD uv.lock /app/uv.lock
+ADD pyproject.toml /app/pyproject.toml
 
-# Install build essentials and libpq-dev for psycopg2
-RUN apt-get update && \
-    apt-get install -y libpq-dev gcc && \
-    rm -rf /var/lib/apt/lists/*
+# Install dependencies
+RUN uv sync --frozen --no-install-project
 
-# Install poetry
-RUN pip install "poetry==$POETRY_VERSION"
+# Copy the project into the image
+ADD . /app
 
-# Copy only requirements to cache them in docker layer
-WORKDIR /code
-COPY poetry.lock pyproject.toml /code/
-
-# Project initialization:
-RUN poetry install --no-interaction --no-ansi --no-root --without dev
-
-# Copy Python code to the Docker image
-COPY {{cookiecutter.project_slug}} /code/{{cookiecutter.project_slug}}/
+# Sync the project
+RUN uv sync --frozen
 
 CMD [ "python", "{{cookiecutter.project_slug}}/foo.py"]

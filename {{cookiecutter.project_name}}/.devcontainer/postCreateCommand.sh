@@ -1,7 +1,11 @@
 #! /usr/bin/env bash
 
+# Install uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
+source $HOME/.cargo/env
+
 # Install Dependencies
-poetry install --with dev
+uv sync
 
 # Install pre-commit hooks
-poetry run pre-commit install --install-hooks
+uv run pre-commit install --install-hooks
