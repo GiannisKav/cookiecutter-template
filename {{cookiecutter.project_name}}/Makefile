@@ -5,6 +5,7 @@ install: ## Install the virtual environment and install the pre-commit hooks
 	@echo "🚀 Creating virtual environment using uv"
 	@uv sync
 	@uv run pre-commit install
+	@uv export --locked --no-dev --format requirements-txt > requirements.txt
 {%- if cookiecutter.dockerfile == "y"%}
 
 .PHONY: build-image

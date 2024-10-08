@@ -6,8 +6,8 @@
     "project_description": "This is a template repository for Python projects that use uv for their dependency management.",
     "mypy": ["y", "n"],
     "codecov": ["y", "n"],
-    "dockerfile": ["y", "n"],
-    "devcontainer": ["y", "n"],
+    "dockerfile": ["n", "y"],
+    "devcontainer": ["n", "y"],
     "open_source_license": [
         "Not open source",
         "MIT license",
