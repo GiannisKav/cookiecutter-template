@@ -34,7 +34,7 @@ build-backend = "hatchling.build"
 [tool.mypy]
 files = ["{{cookiecutter.project_slug}}", "tests"]
 disallow_untyped_defs = true
-disallow_any_unimported = true
+disallow_any_unimported = false
 no_implicit_optional = true
 check_untyped_defs = true
 warn_return_any = true

@@ -19,10 +19,6 @@ repos:
     rev: "v2.11"
     hooks:
       - id: vulture
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: "v4.0.0-alpha.8"
-    hooks:
-      - id: prettier
   - repo: https://github.com/fpgmaas/deptry.git
     rev: "0.20.0"
     hooks:
@@ -52,3 +48,7 @@ repos:
         args: ["--config-file", "pyproject.toml"]
         pass_filenames: false
 {% endif %}
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: "v4.0.0-alpha.8"
+    hooks:
+      - id: prettier
