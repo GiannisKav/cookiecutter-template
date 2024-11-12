@@ -4,6 +4,7 @@
     "project_name": "example-project",
     "project_slug": "{{cookiecutter.project_name|lower|replace('-', '_')}}",
     "project_description": "This is a template repository for Python projects that use uv for their dependency management.",
+    "python_version": ["3.12", "3.11", "3.10", "3.9", "3.8"],
     "mypy": ["y", "n"],
     "codecov": ["y", "n"],
     "dockerfile": ["n", "y"],

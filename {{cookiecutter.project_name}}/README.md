@@ -31,8 +31,6 @@ To run the docker container, run:
 ```bash
 make run-container
 ```
-{%- endif %}
-
----
+{%- endif %}---
 
 Repository initiated with [cookiecutter-template](https://github.com/GiannisKav/cookiecutter-template).

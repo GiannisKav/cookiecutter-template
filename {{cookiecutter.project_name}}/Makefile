@@ -1,7 +1,10 @@
+PYTHON_VERSION := {{cookiecutter.python_version}}
+
 .PHONY: install
 install: ## Install the virtual environment and install the pre-commit hooks
-	@echo "🚀 Installing python 3.11"
-	@uv python install 3.11
+	@echo "🚀 Installing python $(PYTHON_VERSION)"
+	@uv python install $(PYTHON_VERSION)
+	@uv python pin $(PYTHON_VERSION)
 	@echo "🚀 Creating virtual environment using uv"
 	@uv sync
 	@uv run pre-commit install
