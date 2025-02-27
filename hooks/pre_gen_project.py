@@ -20,3 +20,15 @@ if not re.match(PROJECT_SLUG_REGEX, project_slug):
     )
     # Exit to cancel project
     sys.exit(1)
+
+# If it's a package project, ensure we have a package feed URL
+is_package = "{{cookiecutter.is_package}}"
+package_feed_url = "{{cookiecutter.package_feed_url}}"
+
+if is_package == "y" and not package_feed_url:
+    print("Since this is a package project, we need a package feed URL.")
+    package_feed_url = input(
+        "URL for your private package feed (e.g., https://pkgs.dev.azure.com/your-org/your-project/_packaging/your-feed/pypi): "
+    )
+    # This won't update cookiecutter.package_feed_url for template rendering
+    # but we'll handle that in the templates

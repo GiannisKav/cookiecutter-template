@@ -1,12 +1,20 @@
 [project]
 name = "{{cookiecutter.project_name}}"
+{% if cookiecutter.is_package == "y" -%}
+dynamic = ["version"]
+{% else -%}
 version = "0.0.1"
+{% endif %}
 description = "{{cookiecutter.project_description}}"
 authors = [{ name = "{{cookiecutter.author}}", email = "{{cookiecutter.email}}" }]
 readme = "README.md"
 requires-python = ">=3.10,<4.0"
+dependencies = ["loguru"]
 
 [tool.uv]
+{% if cookiecutter.is_package == "y" -%}
+publish-url = "{{cookiecutter.package_feed_url}}/upload"
+{% endif -%}
 dev-dependencies = [
     "deptry",
     "ipykernel",
@@ -24,11 +32,19 @@ dev-dependencies = [
     {% if cookiecutter.mypy == 'y' -%}
     "mypy",
     {% endif -%}
+    {% if cookiecutter.is_package == 'y' -%}
+    "hatch>=1.14.0",
+    {% endif -%}
 ]
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+{% if cookiecutter.is_package == "y" -%}
+[tool.hatch.version]
+path = "{{cookiecutter.project_slug}}/__init__.py"
+{% endif %}
 
 {% if cookiecutter.mypy == 'y' -%}
 [tool.mypy]

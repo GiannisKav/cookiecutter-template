@@ -9,6 +9,8 @@
     "codecov": ["y", "n"],
     "dockerfile": ["n", "y"],
     "devcontainer": ["n", "y"],
+    "is_package": ["n", "y"],
+    "package_feed_url": "",
     "open_source_license": [
         "Not open source",
         "MIT license",
