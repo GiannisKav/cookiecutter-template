@@ -1,0 +1,77 @@
+name: Build and Publish
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
+
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+      - name: Install dependencies
+        run: |
+          uv sync
+          uv run pre-commit install
+
+      - name: Run code quality checks
+        run: uv run pre-commit run -a
+
+      - name: Create version tag
+        id: versioning
+        run: |
+          # Configure git
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+
+          # Get current version from the latest tag
+          LATEST_TAG=$(git tag --sort=-v:refname | head -1 2>/dev/null || echo "v0.0.0")
+          CURRENT_VERSION=$(echo $LATEST_TAG | sed 's/^v//')
+
+          # Parse the version components
+          MAJOR=$(echo $CURRENT_VERSION | cut -d. -f1)
+          MINOR=$(echo $CURRENT_VERSION | cut -d. -f2)
+          PATCH=$(echo $CURRENT_VERSION | cut -d. -f3)
+
+          # Bump minor version (or adjust as needed)
+          NEW_MINOR=$((MINOR + 1))
+          NEW_VERSION="$MAJOR.$NEW_MINOR.0"
+          NEW_TAG="v$NEW_VERSION"
+
+          # Check if this exact commit is already tagged with a version
+          COMMIT_TAG=$(git tag --points-at HEAD)
+          if [ -n "$COMMIT_TAG" ]; then
+            echo "This commit is already tagged with $COMMIT_TAG - skipping release"
+            echo "SKIP_RELEASE=true" >> $GITHUB_ENV
+            exit 0
+          fi
+
+          # Create and push the tag
+          git tag -a "$NEW_TAG" -m "Release $NEW_VERSION"
+          git push origin "$NEW_TAG"
+
+          # Checkout the exact tag to build from a clean state
+          git checkout "$NEW_TAG"
+
+          # Build the package
+          uv build
+
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+          echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
+
+      - name: Publish package
+        if: {% raw %}${{ env.SKIP_RELEASE != 'true' }}{% endraw %}
+        run: |
+          echo "Publishing version {% raw %}${{ env.NEW_VERSION }}{% endraw %}"
+          uv publish --token {% raw %}${{ secrets.UV_PUBLISH_TOKEN }}{% endraw %}

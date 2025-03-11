@@ -16,8 +16,8 @@ Finally, install the environment and the pre-commit hooks with
 ```bash
 make install
 ```
+{%- if cookiecutter.is_package == "y" %}
 
-{% if cookiecutter.is_package == "y" -%}
 ## Installing the package
 
 ### Using uv directly
@@ -46,18 +46,42 @@ And set the following environment variables:
 export UV_INDEX_INTERNAL_PASSWORD=<YOUR_PERSONAL_ACCESS_TOKEN>
 export UV_INDEX_INTERNAL_USERNAME=<ANY_NON_EMPTY_STRING>
 ```
+{%- if cookiecutter.ci_tool != "none" %}
 
-## Publishing the package
+## Package Releases
 
-To publish a new version of the package:
+Releases are managed automatically by the CI pipeline. When changes are merged to the main branch, the pipeline will create a new version tag and publish the package.
+{%- if cookiecutter.ci_tool == "github_actions" %}
 
-```bash
-export UV_PUBLISH_TOKEN=<YOUR_PERSONAL_ACCESS_TOKEN>
-make release
-```
+### CI Setup - GitHub Actions
 
+You need to add a repository secret for package publishing:
+
+1. Go to your repository on GitHub
+2. Navigate to Settings > Secrets and variables > Actions
+3. Click "New repository secret"
+4. Name: `UV_PUBLISH_TOKEN`
+5. Value: Your package repository access token
+6. Click "Add secret"
 {%- endif %}
-{% if cookiecutter.dockerfile == "y" -%}
+{%- if cookiecutter.ci_tool == "azure_pipelines" %}
+
+### CI Setup - Azure Pipelines
+
+You need to create a variable group for package publishing:
+
+1. In your Azure DevOps project, go to Pipelines > Library
+2. Create a new variable group named "publish-tokens"
+3. Add a variable:
+   - Name: `UV_PUBLISH_TOKEN`
+   - Value: Your package repository access token
+4. Save the variable group
+5. Make sure the pipeline has access to this variable group
+{%- endif %}
+{%- endif %}
+{%- endif %}
+{%- if cookiecutter.dockerfile == "y" %}
+
 ## Docker
 
 To build the docker image, run:
@@ -72,6 +96,7 @@ To run the docker container, run:
 make run-container
 ```
 {%- endif %}
+
 ---
 
 Repository initiated with [cookiecutter-template](https://github.com/GiannisKav/cookiecutter-template).

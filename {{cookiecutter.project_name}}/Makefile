@@ -37,28 +37,6 @@ test: ## Test the code with pytest
 clean: ## Remove build artifacts
 	@echo "🚀 Cleaning build artifacts"
 	@rm -rf build dist *.egg-info
-
-.PHONY: release
-release: check clean ## Release a new version
-	@echo "🚀 Starting release process"
-	echo "🚀 Current version: v$$(uv run hatch version)"; \
-	read -p "Enter version segment to bump (patch/minor/major): " segment; \
-	uv run hatch version $$segment; \
-	NEW_VERSION=$$(uv run hatch version); \
-	echo "🚀 Updated to version: v$$NEW_VERSION"; \
-	uv lock --upgrade-package {{cookiecutter.project_name}}; \
-	uv build; \
-	echo "🚀 Package built"; \
-	read -p "Enter commit message: " msg; \
-	git add -A; \
-	git commit -m "v$$NEW_VERSION: $$msg"; \
-	git tag -f "v$$NEW_VERSION"; \
-	echo "🚀 Tagged commit with version v$$NEW_VERSION"; \
-	git push origin main --tags; \
-	echo "🚀 Pushed changes and tags"; \
-	uv publish; \
-	echo "🚀 Published package"; \
-	echo "🚀 Release of version v$$NEW_VERSION completed successfully!"
 {% endif %}
 
 .PHONY: help
