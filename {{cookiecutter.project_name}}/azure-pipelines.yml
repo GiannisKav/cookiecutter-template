@@ -38,7 +38,12 @@ steps:
 
       # Get current version from the latest tag
       LATEST_TAG=$(git tag --sort=-v:refname | head -1 2>/dev/null || echo "v0.0.0")
-      CURRENT_VERSION=$(echo $LATEST_TAG | sed 's/^v//')
+      CURRENT_VERSION=${LATEST_TAG#v}  # Remove 'v' prefix more reliably
+
+      # Ensure we have a valid version with defaults
+      if [[ ! $CURRENT_VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        CURRENT_VERSION="0.0.0"
+      fi
 
       # Parse the version components
       MAJOR=$(echo $CURRENT_VERSION | cut -d. -f1)

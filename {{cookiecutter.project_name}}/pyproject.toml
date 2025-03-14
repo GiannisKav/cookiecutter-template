@@ -38,12 +38,12 @@ dev-dependencies = [
 ]
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 {% if cookiecutter.is_package == "y" -%}
 [tool.hatch.version]
-path = "{{cookiecutter.project_slug}}/__init__.py"
+source = "vcs"
 {% endif %}
 
 {% if cookiecutter.mypy == 'y' -%}

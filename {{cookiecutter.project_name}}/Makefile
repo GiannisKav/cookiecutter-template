@@ -37,6 +37,31 @@ test: ## Test the code with pytest
 clean: ## Remove build artifacts
 	@echo "🚀 Cleaning build artifacts"
 	@rm -rf build dist *.egg-info
+
+.PHONY: release
+release: install check clean ## Create a new release
+	@echo "🚀 Running release"
+
+	@# Get current version from the latest tag
+	@LATEST_TAG=$$(git tag --sort=-v:refname | head -1 2>/dev/null || echo "v0.0.0"); \
+	CURRENT_VERSION=$$(echo $$LATEST_TAG | sed 's/^v//'); \
+	MAJOR=$$(echo $$CURRENT_VERSION | cut -d. -f1); \
+	MINOR=$$(echo $$CURRENT_VERSION | cut -d. -f2); \
+	PATCH=$$(echo $$CURRENT_VERSION | cut -d. -f3); \
+	NEW_MINOR=$$((MINOR + 1)); \
+	NEW_VERSION="$$MAJOR.$$NEW_MINOR.0"; \
+	NEW_TAG="v$$NEW_VERSION"; \
+	COMMIT_TAG=$$(git tag --points-at HEAD); \
+	if [ -n "$$COMMIT_TAG" ]; then \
+		echo "This commit is already tagged with $$COMMIT_TAG - skipping release"; \
+		exit 0; \
+	fi; \
+	git tag -a "$$NEW_TAG" -m "Release $$NEW_VERSION"; \
+	git push origin "$$NEW_TAG"; \
+	git checkout "$$NEW_TAG"; \
+	uv build; \
+	echo "Publishing version $$NEW_VERSION"; \
+	uv publish
 {% endif %}
 
 .PHONY: help

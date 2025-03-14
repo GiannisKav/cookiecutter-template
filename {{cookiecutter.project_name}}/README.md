@@ -20,13 +20,30 @@ make install
 
 ## Installing the package
 
-### Using uv directly
+{%- if cookiecutter.ci_tool == "github_actions" %}
+### Package Hosting with GitHub
+
+This project uses GitHub to host the package. The GitHub Actions CI will create version tags which you can use to install the package directly from GitHub.
+
+To install the package:
+
+```bash
+uv add "{{cookiecutter.project_name}} @ git+https://github.com/GiannisKav/{{cookiecutter.project_name}}.git"
+```
+
+You'll be prompted to enter your GitHub personal access token during installation.
+{%- elif cookiecutter.ci_tool == "azure_pipelines" %}
+### Package Hosting with Azure Artifacts
+
+This project uses Azure Artifacts Feed to host the package. The Azure Pipelines CI will publish packages to your private feed.
+
+To install the package directly:
 
 ```bash
 uv pip install {{cookiecutter.project_name}} --index-url https://<ANY_NON_EMPTY_STRING>:<YOUR_PERSONAL_ACCESS_TOKEN>@{{cookiecutter.package_feed_url.split('https://')[-1]}}/simple/
 ```
 
-### Adding to your project
+#### Adding to your project
 
 Add to your pyproject.toml:
 
@@ -46,25 +63,24 @@ And set the following environment variables:
 export UV_INDEX_INTERNAL_PASSWORD=<YOUR_PERSONAL_ACCESS_TOKEN>
 export UV_INDEX_INTERNAL_USERNAME=<ANY_NON_EMPTY_STRING>
 ```
-{%- if cookiecutter.ci_tool != "none" %}
+{%- endif %}
 
+{%- if cookiecutter.ci_tool != "none" %}
 ## Package Releases
 
-Releases are managed automatically by the CI pipeline. When changes are merged to the main branch, the pipeline will create a new version tag and publish the package.
 {%- if cookiecutter.ci_tool == "github_actions" %}
+Releases are managed automatically by GitHub Actions. When changes are merged to the main branch, the pipeline will:
 
-### CI Setup - GitHub Actions
+1. Create and push a new version tag
+2. Make the package available for Git-based installation
 
-You need to add a repository secret for package publishing:
+The package can then be installed directly from GitHub using the command shown in the installation section.
+{%- elif cookiecutter.ci_tool == "azure_pipelines" %}
+Releases are managed automatically by Azure Pipelines. When changes are merged to the main branch, the pipeline will:
 
-1. Go to your repository on GitHub
-2. Navigate to Settings > Secrets and variables > Actions
-3. Click "New repository secret"
-4. Name: `UV_PUBLISH_TOKEN`
-5. Value: Your package repository access token
-6. Click "Add secret"
-{%- endif %}
-{%- if cookiecutter.ci_tool == "azure_pipelines" %}
+1. Create a new version tag
+2. Build the package
+3. Publish the package to your Azure Artifacts Feed
 
 ### CI Setup - Azure Pipelines
 
