@@ -51,3 +51,5 @@ repos:
     rev: "v4.0.0-alpha.8"
     hooks:
       - id: prettier
+        files: "\\.md$|\\.json$|\\.yaml$|\\.yml$|\\.js$|\\.ts$|\\.jsx$|\\.tsx$|\\.css$|\\.html$"
+        args: ["--cache"]
