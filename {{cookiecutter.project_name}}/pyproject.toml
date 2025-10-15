@@ -29,8 +29,8 @@ dev-dependencies = [
     {% if cookiecutter.codecov == 'y' -%}
     "pytest-cov",
     {% endif -%}
-    {% if cookiecutter.mypy == 'y' -%}
-    "mypy",
+    {% if cookiecutter.type_checking == 'y' -%}
+    "ty",
     {% endif -%}
     {% if cookiecutter.is_package == 'y' -%}
     "hatch>=1.14.0",
@@ -46,17 +46,18 @@ build-backend = "hatchling.build"
 source = "vcs"
 {% endif %}
 
-{% if cookiecutter.mypy == 'y' -%}
-[tool.mypy]
-files = ["{{cookiecutter.project_slug}}", "tests"]
-disallow_untyped_defs = true
-disallow_any_unimported = false
-no_implicit_optional = true
-check_untyped_defs = true
-warn_return_any = true
-warn_unused_ignores = true
-show_error_codes = true
-ignore_missing_imports = true
+{% if cookiecutter.type_checking == 'y' -%}
+[tool.ty.src]
+include = ["{{cookiecutter.project_slug}}", "tests"]
+
+[tool.ty.environment]
+python = ".venv"
+
+[tool.ty.rules]
+possibly-unresolved-reference = "error"
+invalid-argument-type = "error"
+unsupported-operator = "error"
+unused-ignore-comment = "warn"
 {% endif %}
 
 [tool.pytest.ini_options]

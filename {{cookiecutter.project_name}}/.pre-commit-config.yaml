@@ -38,13 +38,12 @@ repos:
         entry: bash -c 'uv export --locked --no-dev --format requirements-txt > requirements.txt'
         language: system
         pass_filenames: false
-      {% if cookiecutter.mypy == 'y' -%}
-      - id: mypy
-        name: mypy
-        entry: .venv/bin/mypy
+      {% if cookiecutter.type_checking == 'y' -%}
+      - id: ty
+        name: ty
+        entry: .venv/bin/ty check
         language: system
         types: [python]
-        args: ["--config-file", "pyproject.toml"]
         pass_filenames: false
 {% endif %}
   - repo: https://github.com/pre-commit/mirrors-prettier

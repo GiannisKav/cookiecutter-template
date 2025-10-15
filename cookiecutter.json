@@ -8,7 +8,7 @@
     "package_feed_url": "",
     "ci_tool": ["none", "azure_pipelines", "github_actions"],
     "python_version": ["3.12", "3.11", "3.10", "3.9", "3.8"],
-    "mypy": ["y", "n"],
+    "type_checking": ["y", "n"],
     "codecov": ["y", "n"],
     "dockerfile": ["n", "y"],
     "devcontainer": ["n", "y"],

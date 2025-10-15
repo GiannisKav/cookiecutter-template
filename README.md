@@ -6,7 +6,7 @@ This is a Cookiecutter template that can be used to initiate a Python project wi
 - Pre-commit hooks with [pre-commit](https://pre-commit.com/)
 - Code quality with:
   - [ruff](https://github.com/charliermarsh/ruff)
-  - [mypy](https://mypy.readthedocs.io/en/stable/)
+  - [ty](https://github.com/astral-sh/ty) (optional type checking)
   - [prettier](https://prettier.io/)
   - [deptry](https://github.com/fpgmaas/deptry/)
 - Testing with [pytest](https://docs.pytest.org/en/stable/)
