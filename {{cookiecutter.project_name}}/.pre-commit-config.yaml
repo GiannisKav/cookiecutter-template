@@ -7,7 +7,6 @@ repos:
       - id: check-toml
       - id: check-yaml
       - id: end-of-file-fixer
-        exclude: requirements.txt
       - id: trailing-whitespace
   - repo: https://github.com/charliermarsh/ruff-pre-commit
     rev: "v0.6.5"
@@ -31,11 +30,6 @@ repos:
       - id: uv-sync
         name: uv-sync
         entry: uv sync --locked
-        language: system
-        pass_filenames: false
-      - id: uv-export
-        name: uv-export
-        entry: bash -c 'uv export --locked --no-dev --format requirements-txt > requirements.txt'
         language: system
         pass_filenames: false
       {% if cookiecutter.type_checking == 'y' -%}
